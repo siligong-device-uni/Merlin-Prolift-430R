@@ -1,0 +1,2 @@
+# Ignore KiCad lock files
+*.kicad_???.lck
