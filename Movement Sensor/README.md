@@ -29,4 +29,6 @@ Hardware components
 * M4 bolt and nut x3
 * ~22mm long, 8mm shaft (steel or brass)
 * Skate bearing
-* Washers to shim cog into position.
+* Washers as shims
+* Black PLA for cog and case
+* White PLA for the backing/reflective plate
