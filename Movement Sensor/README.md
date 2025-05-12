@@ -16,6 +16,8 @@ The optical sensor outputs are improved using an Op Amp configured as a comparat
 
 ## BOM
 
+Electronic components
+
 * ITR20001 reflective optical sensors x2
 * LM358 Dual Op Amp
 * 560R resistor x2
@@ -23,3 +25,8 @@ The optical sensor outputs are improved using an Op Amp configured as a comparat
 * 10K trim pot x2
 * 10pF MLC capacitor
 
+Hardware components
+* M4 bolt and nut x3
+* ~22mm long, 8mm shaft (steel or brass)
+* Skate bearing
+* Washers to shim cog into position.
