@@ -1,2 +1,6 @@
 # Ignore KiCad lock files
 *.kicad_???.lck
+
+# Python files
+.pyc
+.python-version

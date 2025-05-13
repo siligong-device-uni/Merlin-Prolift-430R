@@ -1,0 +1,85 @@
+substitutions:
+  device_name: prolift-430
+  # Delay before movement is considered to have halted
+  stop_detection_time: 500ms
+  # Distance represented by each pulse from the rotary encoder (in mm)
+  pulse_distance: 10mm
+
+esphome:
+  name: ${device_name}
+  friendly_name: Prolift-430
+
+rp2040:
+  board: rpipicow
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "HkwX1V5HxC25otTthdFd3JqlEIuaKfkv7oQMuVLDoQM="
+
+ota:
+  - platform: esphome
+    password: "36113627e49da1d495836cd27493b0f1"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot in case wifi connection fails
+  ap:
+    ssid: "Prolift-430 Fallback Hotspot"
+    password: "FAZuJwak051b"
+
+sensor:
+  # Rotary sensor for aquiring position.
+  - platform: rotary_encoder
+    id: door_position
+    name: ${device_name} Door Position
+    pin_a: 6
+    pin_b: 7
+    resolution: 4
+    restore_mode: ALWAYS_ZERO
+    unit_of_measurement: mm
+    filters: 
+      - multiply: 10
+    on_clockwise:
+      - sensor.template.publish: 
+          id: door_state
+          state: 1
+      - script.execute: door_detect_stop
+    on_anticlockwise: 
+      - sensor.template.publish: 
+          id: door_state
+          state: 2
+      - script.execute: door_detect_stop
+
+  # Tristate indicating current motion (0: Stopped; 1: Opening; 2: Closing)
+  - platform: template
+    id: door_state
+    name: ${device_name} Door State
+
+script:
+  # Script that detects when the door has stopped moving (not received a update pulse)
+  - id: door_detect_stop
+    mode: restart
+    then:
+      - delay: ${stop_detection_time}
+      - sensor.template.publish: 
+          id: door_state
+          state: 0
+
+button:
+  # Reset position of the door.
+  - platform: template
+    device_class: restart
+    name: "Reset Door Position"
+    disabled_by_default: True
+    on_press: 
+      then:
+        - sensor.rotary_encoder.set_value: 
+            id: door_position
+            value: 0
+
